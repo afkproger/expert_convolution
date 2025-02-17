@@ -1,0 +1,5 @@
+package com.example.expconv_server.domain.user;
+
+public enum Role {
+    ROLE_USER, ROLE_ADMIN
+}

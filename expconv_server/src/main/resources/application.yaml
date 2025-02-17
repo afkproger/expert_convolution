@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    username: postgres
+    password: 1234
+    url: jdbc:postgresql://localhost:5432/tasklist
+    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: dev
+
+#  flyway:
+#    locations: classpath:db/migration
+#    placeholder-replacement: false
+
+security:
+  jwt:
+    secret: cWZpcWlmdXFpb2Zxb2lmdXFvaWZ1cW9pZnVvcWlmdW9xaXVmb2lx
+    access: 360000
+    refresh: 2592000000
+server:
+  port: 5000
+
+front:
+  url: http://localhost:63343
+
