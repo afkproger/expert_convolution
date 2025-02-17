@@ -1,5 +1,6 @@
 package com.example.expconv_server.domain.task;
 
+import com.example.expconv_server.domain.scale.Scale;
 import com.example.expconv_server.domain.user.User;
 import jakarta.persistence.*;
 
@@ -23,7 +24,16 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne(mappedBy = "task" , cascade = CascadeType.ALL)
+    private Scale scale;
 
+    public Scale getScale() {
+        return scale;
+    }
+
+    public void setScale(Scale scale) {
+        this.scale = scale;
+    }
 
     public Long getId() {
         return id;
