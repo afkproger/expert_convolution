@@ -5,9 +5,10 @@ import com.example.expconv_server.domain.user.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table (name = "tasks")
+@Table(name = "tasks")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,21 +19,22 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
     private LocalDateTime expirationDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "task" , cascade = CascadeType.ALL)
-    private Scale scale;
+    @OneToMany(mappedBy = "scale")
+    private List<Scale> scales;
 
-    public Scale getScale() {
-        return scale;
+    public List<Scale> getScales() {
+        return scales;
     }
 
-    public void setScale(Scale scale) {
-        this.scale = scale;
+    public void setScales(List<Scale> scales) {
+        this.scales = scales;
     }
 
     public Long getId() {
