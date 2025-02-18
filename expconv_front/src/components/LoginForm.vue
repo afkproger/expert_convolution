@@ -19,6 +19,8 @@
         </p>
       </form>
     </div>
+
+    <h1> </h1>
   </div>
 </template>
 
@@ -35,14 +37,14 @@ export default {
   methods:{
     async handleSubmit(){
       try {
-        const response = await fetch('/api/user/login', {
+        const response = await fetch(`${process.env.VUE_APP_API_BASE_URL}auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            username: this.data.username,
-            password: this.data.password,
+            username: this.formData.username,
+            password: this.formData.password,
           })
         });
 

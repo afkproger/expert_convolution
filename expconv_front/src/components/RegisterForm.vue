@@ -36,12 +36,12 @@ export default {
         password: '',
         confirm_password: '',
         email: '',
-      }
+      },
     };
   },
   methods: {
     checkConfirmPassword(password , confirm_password) {
-      return confirm_password === confirm_password;
+      return password === confirm_password;
     },
     async handleSubmit() {
       if (!this.checkConfirmPassword(this.formData.password , this.formData.confirm_password)) {
@@ -50,7 +50,7 @@ export default {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/v1/auth/register', {
+        const response = await fetch(`${process.env.VUE_APP_API_BASE_URL}auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
