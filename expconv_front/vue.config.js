@@ -1,4 +1,7 @@
-const { defineConfig } = require('@vue/cli-service')
+const { defineConfig } = require('@vue/cli-service');
+
 module.exports = defineConfig({
-  transpileDependencies: true
-})
+  devServer: {
+    watchFiles: ['src/**/*'], // Следит за изменениями в папке src
+  },
+});

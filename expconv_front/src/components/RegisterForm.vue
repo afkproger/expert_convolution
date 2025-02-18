@@ -1,27 +1,29 @@
 <template>
-  <header>
-    <img src="../assets/login_logo.png" alt="Логотип СПБ ФИЦ РАН" class="logo">
-    <h1>Регистрация</h1>
-  </header>
+  <div class ="container">
+    <div class="form-container">
+      <header>
+        <img src="../assets/pages/login_logo.png" alt="Логотип СПБ ФИЦ РАН" class="logo">
+        <h1>Регистрация</h1>
+      </header>
+      <form @submit.prevent = "handleSubmit">
+        <label for="name"> Имя:</label>
+        <input type="text" id="name"  v-model="formData.name" required  placeholder="Введите ваше имя" >
 
-  <form class="register-form" @submit.prevent = "handleSubmit">
-    <label for="name"> Имя:</label>
-    <input type="text" id="name"  v-model="formData.name" required  placeholder="Введите ваше имя" >
+        <label for="username"> Логин:</label>
+        <input type="text" id="username" required  placeholder="Введите ваш логин" v-model="formData.username">
 
-    <label for="username"> Логин:</label>
-    <input type="text" id="username" required  placeholder="Введите ваш логин" v-model="formData.username">
+        <label for="password"> Пароль:</label>
+        <input type="password" id="password" required placeholder="Придумайте пароль" v-model="formData.password">
 
-    <label for="password"> Пароль:</label>
-    <input type="password" id="password" required placeholder="Придумайте пароль" v-model="formData.password">
+        <label for="confirm_password"> Повторите пароль:</label>
+        <input type="password" id="confirm_password" required  placeholder="Повторите пароль" v-model="formData.confirm_password">
 
-    <label for="confirm_password"> Повторите пароль:</label>
-    <input type="password" id="confirm_password" required  placeholder="Повторите пароль" v-model="formData.confirm_password">
-
-    <label for="email">Введите вашу почту</label>
-    <input type="email" id="email" required  placeholder="Введите вашу почту:" v-model="formData.email">
-    <button type="submit" class="submit-button"> Зарегестироваться </button>
-  </form>
-
+        <label for="email">Введите вашу почту</label>
+        <input type="email" id="email" required  placeholder="Введите вашу почту:" v-model="formData.email">
+        <button type="submit" class="submit-button"> Зарегестироваться </button>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -78,5 +80,10 @@ export default {
 };
 </script>
 <style scoped>
+
+.form-container {
+  max-width: 400px;
+  max-height: 650px;
+}
 
 </style>
