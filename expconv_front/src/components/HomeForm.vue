@@ -1,5 +1,5 @@
 <template>
-  <HeaderForm :buttonText="loginButtonText" :buttonFunction="goToLogin" />
+  <HeaderForm :buttonText="loginButtonText" @buttonClick="goToLogin" />
   <main>
     <aside class="sidebar">
       <div class="sidebar-container">

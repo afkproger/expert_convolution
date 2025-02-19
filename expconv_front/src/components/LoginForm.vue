@@ -32,6 +32,12 @@ export default {
         username: '',
         password: ''
       },
+      userTokens:{
+        id: 0,
+        username: '',
+        accusesToken: '',
+        refreshToken: ''
+      }
     };
   },
   methods:{
@@ -50,15 +56,18 @@ export default {
 
         if (response.ok){
           const result = await response.json();
-          console.log(result);
+          if (result && result.accusesToken && result.refreshToken ){
+            this.userTokens = result;
+            localStorage.setItem('userTokens', JSON.stringify(this.userTokens));
+          }else {
+            alert("Ошибка в работе системы")
+          }
         }else {
           const result = await response.json();
           alert(`Ошибка при входе в систему ${result.message}`);
-
         }
       }catch(error){
         console.error(error);
-
       }
     }
   }

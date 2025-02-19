@@ -21,15 +21,11 @@ export default {
     buttonText:{
       type: String,
       required: true
-    } ,
-    buttonFunction:{
-      type:Function,
-      required:true
     }
   },
   methods: {
     handleClick(){
-      this.buttonFunction();
+      this.$emit('buttonClick');
     }
   }
 }
