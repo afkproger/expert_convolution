@@ -13,6 +13,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -27,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public JwtResponse login(JwtRequest loginRequest , HttpServletResponse httpServletResponse) {
+    public JwtResponse login(JwtRequest loginRequest, HttpServletResponse response) {
         JwtResponse jwtResponse = new JwtResponse();
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -40,10 +42,23 @@ public class AuthServiceImpl implements AuthService {
         jwtResponse.setId(user.getId());
 
 
-        String accessToken =  jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername());
-        String refreshToken =   jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
+        String accessToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername());
+        String refreshToken = jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
 
-        ResponseCookie a
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .sameSite("Strict")
+                .path("/")
+                .maxAge(Duration.ofMinutes(15))
+                .build();
+
+        ResponseCookie refreshTokenCookies = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true).sameSite("Strict").path("/").maxAge(Duration.ofDays(15)).build();
+
+
+        response.addHeader("Set-Cookie" , refreshTokenCookies.toString());
+        response.addHeader("Set-Cookie", accessTokenCookie.toString());
+        jwtResponse.setRefreshToken(refreshToken);
         return jwtResponse;
     }
 
