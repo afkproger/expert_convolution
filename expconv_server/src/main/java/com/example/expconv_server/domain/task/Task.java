@@ -26,7 +26,7 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "scale")
+    @OneToMany(mappedBy = "task")
     private List<Scale> scales;
 
     public List<Scale> getScales() {

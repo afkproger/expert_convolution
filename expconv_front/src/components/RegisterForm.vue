@@ -50,7 +50,8 @@ export default {
       }
 
       try {
-        const response = await fetch(`${process.env.VUE_APP_API_BASE_URL}auth/register`, {
+        console.log(this.$apiBaseUrl);
+        const response = await fetch(`${this.$apiBaseUrl}auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -67,6 +68,7 @@ export default {
         if (response.ok) {
           const result = await response.json();
           console.log(result);
+          await this.$router.push('/login');
         }else {
           const error = await response.json();
           console.error(error);

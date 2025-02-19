@@ -2,10 +2,13 @@ spring:
   datasource:
     username: postgres
     password: 1234
-    url: jdbc:postgresql://localhost:5432/tasklist
+    url: jdbc:postgresql://localhost:5432/expconv
     driver-class-name: org.postgresql.Driver
   profiles:
     active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 #  flyway:
 #    locations: classpath:db/migration
@@ -20,5 +23,5 @@ server:
   port: 5000
 
 front:
-  url: http://localhost:63343
+  url: http://localhost:8080
 
