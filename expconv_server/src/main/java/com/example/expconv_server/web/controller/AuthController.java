@@ -11,6 +11,7 @@ import com.example.expconv_server.web.dto.validation.OnCreate;
 import com.example.expconv_server.web.mappers.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,8 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Get user tokens")
-    public JwtResponse login(@RequestBody JwtRequest jwtRequest) {
-        return authService.login(jwtRequest);
+    public JwtResponse login(@RequestBody JwtRequest jwtRequest , HttpServletResponse response) {
+        return authService.login(jwtRequest , response);
     }
 
     @PostMapping("/register")

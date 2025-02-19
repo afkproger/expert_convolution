@@ -6,6 +6,9 @@ import com.example.expconv_server.service.UserService;
 import com.example.expconv_server.web.dto.auth.JwtRequest;
 import com.example.expconv_server.web.dto.auth.JwtResponse;
 import com.example.expconv_server.web.security.providers.JwtTokenProvider;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public JwtResponse login(JwtRequest loginRequest) {
+    public JwtResponse login(JwtRequest loginRequest , HttpServletResponse httpServletResponse) {
         JwtResponse jwtResponse = new JwtResponse();
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -35,8 +38,12 @@ public class AuthServiceImpl implements AuthService {
         User user = userService.getByUsername(loginRequest.getUsername());
         jwtResponse.setUsername(user.getUsername());
         jwtResponse.setId(user.getId());
-        jwtResponse.setRefreshToken(jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername()));
-        jwtResponse.setAccusesToken(jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles()));
+
+
+        String accessToken =  jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername());
+        String refreshToken =   jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
+
+        ResponseCookie a
         return jwtResponse;
     }
 
