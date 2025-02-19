@@ -56,7 +56,7 @@ export default {
 
         if (response.ok){
           const result = await response.json();
-          if (result && result.accusesToken && result.refreshToken ){
+          if (result){
             this.userTokens = result;
             localStorage.setItem('userTokens', JSON.stringify(this.userTokens));
           }else {
