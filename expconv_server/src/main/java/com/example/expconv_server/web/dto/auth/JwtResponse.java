@@ -7,15 +7,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class JwtResponse {
     private Long user_id;
 
+    @Override
+    public String toString() {
+        return "JwtResponse{" +
+                "user_id=" + user_id +
+                ", username='" + username + '\'' +
+                '}';
+    }
+
     @Schema(description = "User username" , example = "afkproger")
     private String username;
 
-    public Long getId() {
+    public Long getUserId() {
         return user_id;
     }
 
-    public void setId(Long id) {
-        this.user_id = id;
+    public void setUserId(Long user_id) {
+        this.user_id = user_id;
     }
 
     public String getUsername() {
@@ -25,5 +33,4 @@ public class JwtResponse {
     public void setUsername(String username) {
         this.username = username;
     }
-
 }

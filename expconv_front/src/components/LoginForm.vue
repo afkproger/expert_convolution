@@ -32,44 +32,42 @@ export default {
         username: '',
         password: ''
       },
-      userTokens:{
-        id: 0,
-        username: '',
-        accusesToken: '',
-        refreshToken: ''
-      }
+      user_id: null
     };
   },
   methods:{
-    async handleSubmit(){
+    async handleSubmit() {
       try {
         const response = await fetch(`${this.$apiBaseUrl}auth/login`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           credentials: "include",
           body: JSON.stringify({
             username: this.formData.username,
             password: this.formData.password,
-          })
+          }),
         });
 
-        if (response.ok){
+        if (response.ok) {
           const result = await response.json();
-          if (result){
-            console.log(result);
-            this.user_id = result;
-            localStorage.setItem('userTokens', JSON.stringify(this.userTokens));
-          }else {
-            alert("Ошибка в работе системы")
+          console.log("Ответ от сервера:", result);
+
+          if (result && result.userId) {
+            this.user_id = result.userId;
+            console.log("User ID:", this.user_id);
+            localStorage.setItem("userId", JSON.stringify(this.user_id));
+            await this.$router.push("/workspace");
+          } else {
+            alert("Ошибка в работе системы: userId не найден");
           }
-        }else {
+        } else {
           const result = await response.json();
-          alert(`Ошибка при входе в систему ${result.message}`);
+          alert(`Ошибка при входе в систему: ${result.message}`);
         }
-      }catch(error){
-        console.error(error);
+      } catch (error) {
+        console.error("Ошибка в запросе:", error);
       }
     }
   }

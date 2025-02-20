@@ -5,7 +5,6 @@ import com.example.expconv_server.domain.exception.AccessDeniedException;
 import com.example.expconv_server.domain.user.Role;
 import com.example.expconv_server.domain.user.User;
 import com.example.expconv_server.service.UserService;
-import com.example.expconv_server.web.controller.AuthController;
 import com.example.expconv_server.web.dto.auth.JwtResponse;
 import com.example.expconv_server.web.security.JwtProperties;
 import io.jsonwebtoken.*;
@@ -83,7 +82,7 @@ public class JwtTokenProvider {
         if (validateToken(refreshToken)) {
             Long userId = Long.valueOf(getId(refreshToken));
             User user = userService.getById(userId);
-            jwtResponse.setId(userId);
+            jwtResponse.setUserId(userId);
             jwtResponse.setUsername(user.getUsername());
 
             return jwtResponse;

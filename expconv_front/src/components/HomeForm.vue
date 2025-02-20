@@ -185,6 +185,7 @@ export default {
   data(){
     return{
       loginButtonText: 'Войти',
+      userId: null
     };
   },
   methods: {
@@ -202,6 +203,7 @@ export default {
         }
         const data = await response.json();
         console.log(data);
+        localStorage.setItem("userId", data.userId);
         return data.authenticated;
       }catch(error){
         return false

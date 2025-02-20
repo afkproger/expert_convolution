@@ -48,7 +48,9 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "Get user tokens")
     public JwtResponse login(@RequestBody JwtRequest jwtRequest, HttpServletResponse response) {
-        return authService.login(jwtRequest, response);
+        JwtResponse jwtResponse = authService.login(jwtRequest, response);
+        logger.info(jwtResponse.toString());
+        return jwtResponse;
     }
 
     @PostMapping("/register")
@@ -83,7 +85,7 @@ public class AuthController {
                 String username = jwtTokenProvider.getUsername(accessToken);
                 User user = userService.getByUsername(username);
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("authenticated", true, "user_id", user.getId()));
+                        .body(Map.of("authenticated", true, "userId", user.getId()));
             }else{
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));
             }

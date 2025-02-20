@@ -3,11 +3,9 @@ package com.example.expconv_server.service.impl;
 import com.example.expconv_server.domain.user.User;
 import com.example.expconv_server.service.AuthService;
 import com.example.expconv_server.service.UserService;
-import com.example.expconv_server.web.controller.AuthController;
 import com.example.expconv_server.web.dto.auth.JwtRequest;
 import com.example.expconv_server.web.dto.auth.JwtResponse;
 import com.example.expconv_server.web.security.providers.JwtTokenProvider;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
         }
         User user = userService.getByUsername(loginRequest.getUsername());
         jwtResponse.setUsername(user.getUsername());
-        jwtResponse.setId(user.getId());
+        jwtResponse.setUserId(user.getId());
 
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
