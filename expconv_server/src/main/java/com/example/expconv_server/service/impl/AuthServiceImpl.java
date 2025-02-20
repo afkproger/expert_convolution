@@ -3,11 +3,14 @@ package com.example.expconv_server.service.impl;
 import com.example.expconv_server.domain.user.User;
 import com.example.expconv_server.service.AuthService;
 import com.example.expconv_server.service.UserService;
+import com.example.expconv_server.web.controller.AuthController;
 import com.example.expconv_server.web.dto.auth.JwtRequest;
 import com.example.expconv_server.web.dto.auth.JwtResponse;
 import com.example.expconv_server.web.security.providers.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
     public AuthServiceImpl(JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
@@ -42,23 +45,22 @@ public class AuthServiceImpl implements AuthService {
         jwtResponse.setId(user.getId());
 
 
-        String accessToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername());
-        String refreshToken = jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
+        String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername());
 
         ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
-                .sameSite("Strict")
+                .sameSite("Lax")
                 .path("/")
                 .maxAge(Duration.ofMinutes(15))
                 .build();
 
-        ResponseCookie refreshTokenCookies = ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true).sameSite("Strict").path("/").maxAge(Duration.ofDays(15)).build();
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true).sameSite("Lax").path("/").maxAge(Duration.ofDays(15)).build();
 
 
-        response.addHeader("Set-Cookie" , refreshTokenCookies.toString());
         response.addHeader("Set-Cookie", accessTokenCookie.toString());
-        jwtResponse.setRefreshToken(refreshToken);
+        response.addHeader("Set-Cookie", refreshTokenCookie.toString());
         return jwtResponse;
     }
 

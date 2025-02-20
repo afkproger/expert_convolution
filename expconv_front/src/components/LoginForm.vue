@@ -48,6 +48,7 @@ export default {
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: "include",
           body: JSON.stringify({
             username: this.formData.username,
             password: this.formData.password,
@@ -57,7 +58,8 @@ export default {
         if (response.ok){
           const result = await response.json();
           if (result){
-            this.userTokens = result;
+            console.log(result);
+            this.user_id = result;
             localStorage.setItem('userTokens', JSON.stringify(this.userTokens));
           }else {
             alert("Ошибка в работе системы")

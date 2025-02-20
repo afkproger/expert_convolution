@@ -1,5 +1,5 @@
 <template>
-  <HeaderForm :buttonText="loginButtonText" @buttonClick="goToLogin" />
+  <HeaderForm :buttonText="loginButtonText" @buttonClick="handleAuthRedirect" />
   <main>
     <aside class="sidebar">
       <div class="sidebar-container">
@@ -188,12 +188,32 @@ export default {
     };
   },
   methods: {
-    goToLogin(){
-      this.$router.push('/login');
+    async checkLogin(){
+      try {
+        const response = await fetch(`${this.$apiBaseUrl}auth/check` , {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        if (!response.ok){
+          return false;
+        }
+        const data = await response.json();
+        console.log(data);
+        return data.authenticated;
+      }catch(error){
+        return false
+      }
+    },
+    async handleAuthRedirect(){
+      const isAuthenticated = await this.checkLogin();
+      console.log(isAuthenticated);
+      await this.$router.push(isAuthenticated ? "/workspace" : "/login");
+      }
     }
-  }
 }
-
 </script>
 
 <style scoped>

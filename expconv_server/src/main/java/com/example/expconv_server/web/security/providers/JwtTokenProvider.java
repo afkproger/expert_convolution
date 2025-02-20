@@ -5,11 +5,14 @@ import com.example.expconv_server.domain.exception.AccessDeniedException;
 import com.example.expconv_server.domain.user.Role;
 import com.example.expconv_server.domain.user.User;
 import com.example.expconv_server.service.UserService;
+import com.example.expconv_server.web.controller.AuthController;
 import com.example.expconv_server.web.dto.auth.JwtResponse;
 import com.example.expconv_server.web.security.JwtProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +26,7 @@ import java.util.Set;
 
 @Service
 public class JwtTokenProvider {
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
     private final JwtProperties jwtProperties;
     private final UserDetailsService userDetailsService;
     private final UserService userService;
@@ -81,8 +85,6 @@ public class JwtTokenProvider {
             User user = userService.getById(userId);
             jwtResponse.setId(userId);
             jwtResponse.setUsername(user.getUsername());
-            jwtResponse.setAccusesToken(createAccessToken(userId, user.getUsername(), user.getRoles()));
-            jwtResponse.setRefreshToken(createRefreshToken(userId, user.getUsername()));
 
             return jwtResponse;
         } else {
@@ -91,6 +93,7 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
+        logger.info("Мы зашли в validateToken");
         try {
             Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             return !claims.getExpiration().before(new Date());  // Проверка срока действия

@@ -17,7 +17,7 @@ spring:
 security:
   jwt:
     secret: cWZpcWlmdXFpb2Zxb2lmdXFvaWZ1cW9pZnVvcWlmdW9xaXVmb2lx
-    access: 360000
+    access: 900000
     refresh: 2592000000
 server:
   port: 5000
