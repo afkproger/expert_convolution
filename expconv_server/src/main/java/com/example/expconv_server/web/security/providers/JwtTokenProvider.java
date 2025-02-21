@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -109,6 +110,16 @@ public class JwtTokenProvider {
             return !claims.getExpiration().before(new Date());  // Проверка срока действия
 
         } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+    public boolean deleteTokens(HttpServletResponse response) {
+        try {
+            deleteCookie("refreshToken" , response);
+            deleteCookie("accessToken" , response);
+            return true;
+        }catch (Exception e) {
+            logger.error(e.getMessage());
             return false;
         }
     }

@@ -19,6 +19,9 @@ body{
 .submit-button:hover {
     background-color: #7baa2e;
 }
+.submit-button.exit:hover {
+    background-color: #912020;
+}
 
 .link {
     color:#023051;

@@ -91,4 +91,15 @@ public class AuthController {
             }
         }
     }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Logout profile")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        if (authService.logout(response)){
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("logout", true));
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("logout", false));
+        }
+
+    }
 }

@@ -4,22 +4,22 @@
       <table class="table">
         <tbody>
         <tr>
-          <td>Имя</td>
+          <td>Имя:</td>
           <td>{{ userDetails.name }}</td>
         </tr>
         <tr>
-          <td>Почта</td>
+          <td>Почта:</td>
           <td>{{ userDetails.email }}</td>
         </tr>
         <tr>
-          <td>Логин</td>
+          <td>Логин:</td>
           <td>{{ userDetails.username }}</td>
         </tr>
         </tbody>
       </table>
-      <div>
+      <div class="button-group">
         <button @click="goToDetail" class="submit-button">Инструкция</button>
-        <button @click="logout" class="submit-button"> Выйти </button>
+        <button @click="logout" class="submit-button exit"> Выйти </button>
       </div>
     </aside>
   </div>
@@ -38,8 +38,27 @@ export default {
     goToDetail(){
       this.$router.push('/')
     },
-    logout(){
-      console.log('logout');
+    async logout() {
+      try {
+        const response = await fetch(`${this.$apiBaseUrl}auth/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log("Ответ от сервера:", result);
+          this.$router.push('/')
+          localStorage.removeItem("userId");
+        } else {
+          alert(`Ошибка при выходе из системы:`);
+        }
+      } catch (error) {
+        console.error("Ошибка в запросе:", error);
+      }
     }
   }
 }
@@ -58,12 +77,20 @@ export default {
   background-color: white;
   border: 1px solid #9ac430;
   width: 400px;
-  height: 400px;
+  height: 260px;
   border-radius: 10px;
   padding: 10px;
 }
 .submit-button {
-  width: 100px;
+  width: 120px;
+}
+.button-group{
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+
 }
 
 </style>

@@ -55,4 +55,9 @@ public class AuthServiceImpl implements AuthService {
     public JwtResponse refresh(String refreshToken ,  HttpServletResponse response) {
         return jwtTokenProvider.refreshUserToken(refreshToken , response);
     }
+
+    @Override
+    public boolean logout(HttpServletResponse response) {
+        return jwtTokenProvider.deleteTokens(response);
+    }
 }

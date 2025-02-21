@@ -7,8 +7,8 @@
     </div>
     <div class="header-nav">
       <ul>
-        <li> <a href="https://spcras.ru/spiiras/" class="link"> Об институте </a> </li>
-        <li> <a href="https://litsam.ru/index.php/ru/homepage-ru" class="link"> О лаборатории </a> </li>
+        <li> <a href="https://spcras.ru/spiiras/" class="link" target="_blank"> Об институте </a> </li>
+        <li> <a href="https://litsam.ru/index.php/ru/homepage-ru" class="link" target="_blank"> О лаборатории </a> </li>
       </ul>
       <button @click="handleClick" class="submit-button">{{buttonText}}</button>
     </div>
