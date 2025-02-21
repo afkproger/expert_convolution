@@ -10,8 +10,11 @@ import com.example.expconv_server.web.security.JwtProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -77,13 +81,20 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public JwtResponse refreshUserToken(String refreshToken) {
+    public JwtResponse refreshUserToken(String refreshToken , HttpServletResponse response) {
         JwtResponse jwtResponse = new JwtResponse();
         if (validateToken(refreshToken)) {
             Long userId = Long.valueOf(getId(refreshToken));
             User user = userService.getById(userId);
             jwtResponse.setUserId(userId);
             jwtResponse.setUsername(user.getUsername());
+
+            String updateAccessToken = createAccessToken(userId, user.getUsername(), user.getRoles());
+            String updateRefreshToken = createRefreshToken(user.getId() , user.getUsername());
+
+            deleteCookie("refreshToken" , response);
+            addCookie("accessToken" , updateAccessToken , Duration.ofMinutes(15) , response);
+            addCookie("refreshToken" , updateRefreshToken , Duration.ofDays(7) , response);
 
             return jwtResponse;
         } else {
@@ -105,6 +116,26 @@ public class JwtTokenProvider {
     private String getId(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         return claims.getId();
+    }
+
+    private void deleteCookie(String name , HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from(name, "")
+                .httpOnly(true)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(0)
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
+    }
+
+    public void addCookie(String name , String value , Duration maxAge , HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .httpOnly(true)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(maxAge)
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 
     public Authentication getAuthentication(String token) {

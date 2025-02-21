@@ -1,6 +1,6 @@
 <template>
 <HeaderForm button-text="Профиль" @buttonClick="openCloseModal"/>
-  <UserModalForm v-if="showModal" user-details="userDetails"/>
+  <UserModalForm v-if="showModal" :user-details="userDetails"/>
 </template>
 
 <script>

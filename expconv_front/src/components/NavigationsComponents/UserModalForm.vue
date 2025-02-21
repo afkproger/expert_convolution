@@ -1,10 +1,30 @@
 <template>
   <div class="container">
     <aside class="modal_slider">
-      <h1> Hello world </h1>
+      <table class="table">
+        <tbody>
+        <tr>
+          <td>Имя</td>
+          <td>{{ userDetails.name }}</td>
+        </tr>
+        <tr>
+          <td>Почта</td>
+          <td>{{ userDetails.email }}</td>
+        </tr>
+        <tr>
+          <td>Логин</td>
+          <td>{{ userDetails.username }}</td>
+        </tr>
+        </tbody>
+      </table>
+      <div>
+        <button @click="goToDetail" class="submit-button">Инструкция</button>
+        <button @click="logout" class="submit-button"> Выйти </button>
+      </div>
     </aside>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -15,6 +35,12 @@ export default {
     }
   },
   methods:{
+    goToDetail(){
+      this.$router.push('/')
+    },
+    logout(){
+      console.log('logout');
+    }
   }
 }
 </script>
@@ -36,4 +62,8 @@ export default {
   border-radius: 10px;
   padding: 10px;
 }
+.submit-button {
+  width: 100px;
+}
+
 </style>

@@ -46,24 +46,13 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername());
 
-        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
-                .httpOnly(true)
-                .sameSite("Lax")
-                .path("/")
-                .maxAge(Duration.ofMinutes(15))
-                .build();
-
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true).sameSite("Lax").path("/").maxAge(Duration.ofDays(15)).build();
-
-
-        response.addHeader("Set-Cookie", accessTokenCookie.toString());
-        response.addHeader("Set-Cookie", refreshTokenCookie.toString());
+        jwtTokenProvider.addCookie("accessToken" , accessToken , Duration.ofMinutes(15) , response);
+        jwtTokenProvider.addCookie("refreshToken", refreshToken , Duration.ofDays(7) , response);
         return jwtResponse;
     }
 
     @Override
-    public JwtResponse refresh(String refreshToken) {
-        return jwtTokenProvider.refreshUserToken(refreshToken);
+    public JwtResponse refresh(String refreshToken ,  HttpServletResponse response) {
+        return jwtTokenProvider.refreshUserToken(refreshToken , response);
     }
 }

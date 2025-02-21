@@ -70,8 +70,8 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "Refresh user tokens")
-    public JwtResponse refresh(@RequestBody String refreshToken) {
-        return authService.refresh(refreshToken);
+    public JwtResponse refresh(@CookieValue(name = "refreshToken" , required = true) String refreshToken , HttpServletResponse response) {
+        return authService.refresh(refreshToken , response);
     }
 
 
