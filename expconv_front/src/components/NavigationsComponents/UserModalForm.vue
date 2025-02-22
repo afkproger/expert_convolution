@@ -67,12 +67,10 @@ export default {
 <style scoped>
 .container {
   justify-content: flex-end;
-  height: auto;
   align-items: flex-start;
   margin-top: 90px;
 }
 .modal_slider{
-  font-size: 20px;
   margin-right: 10px;
   background-color: white;
   border: 1px solid #9ac430;

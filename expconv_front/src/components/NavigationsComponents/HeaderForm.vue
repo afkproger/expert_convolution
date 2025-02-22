@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="header-container">
+    <div>
       <a href="https://spcras.ru/" target="_blank">
         <img src="../../assets/pages/logo.jpg" alt="Ссылка на сайт">
       </a>
@@ -47,20 +47,18 @@ header{
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header-container img{
+img{
   width: 50px;
   height: 50px;
 }
-.header-nav{
-  width: 60%;
+.header-nav {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-
+  justify-content: space-between;
+  width: 62%;
 }
 
-.header-nav ul{
+.header-nav ul {
   display: flex;
   list-style: none;
 }

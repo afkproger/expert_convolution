@@ -221,7 +221,7 @@ export default {
 <style scoped>
 
 main{
-  margin: 100px 10px 10px 10px;
+  margin: 100px 200px 10px 10px;
   display: flex;
 }
 
@@ -252,6 +252,7 @@ main{
 }
 
 .main-content{
+  align-items: center;
   font-size: 30px;
   font-family: Times New Roman, serif;
   padding: 10px;
