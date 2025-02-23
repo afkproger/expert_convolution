@@ -22,8 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
+
 import java.util.Map;
 
 @RestController
@@ -48,9 +47,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "Get user tokens")
     public JwtResponse login(@RequestBody JwtRequest jwtRequest, HttpServletResponse response) {
-        JwtResponse jwtResponse = authService.login(jwtRequest, response);
-        logger.info(jwtResponse.toString());
-        return jwtResponse;
+        return authService.login(jwtRequest, response);
     }
 
     @PostMapping("/register")
@@ -70,14 +67,18 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "Refresh user tokens")
-    public JwtResponse refresh(@CookieValue(name = "refreshToken" , required = true) String refreshToken , HttpServletResponse response) {
-        return authService.refresh(refreshToken , response);
+    public ResponseEntity<?> refresh(@CookieValue(name = "refreshToken", required = true) String refreshToken, HttpServletResponse response) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(authService.refresh(refreshToken, response));
+        }
     }
 
 
     @GetMapping("/check")
     @Operation(summary = "Проверяем есть ли куки файлы на сервере")
-    public ResponseEntity<?> check(@CookieValue(name = "accessToken", required = false) String accessToken , HttpServletRequest request) {
+    public ResponseEntity<?> check(@CookieValue(name = "accessToken", required = false) String accessToken, HttpServletRequest request) {
         if (accessToken == null || accessToken.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));
         } else {
@@ -86,7 +87,7 @@ public class AuthController {
                 User user = userService.getByUsername(username);
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(Map.of("authenticated", true, "userId", user.getId()));
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));
             }
         }
@@ -95,9 +96,9 @@ public class AuthController {
     @PostMapping("/logout")
     @Operation(summary = "Logout profile")
     public ResponseEntity<?> logout(HttpServletResponse response) {
-        if (authService.logout(response)){
+        if (authService.logout(response)) {
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("logout", true));
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("logout", false));
         }
 

@@ -1,27 +1,29 @@
 <template>
   <div class="container">
-    <aside class="modal_slider">
-      <table class="table">
-        <tbody>
-        <tr>
-          <td>Имя:</td>
-          <td>{{ userDetails.name }}</td>
-        </tr>
-        <tr>
-          <td>Почта:</td>
-          <td>{{ userDetails.email }}</td>
-        </tr>
-        <tr>
-          <td>Логин:</td>
-          <td>{{ userDetails.username }}</td>
-        </tr>
-        </tbody>
-      </table>
-      <div class="button-group">
-        <button @click="goToDetail" class="submit-button">Инструкция</button>
-        <button @click="logout" class="submit-button exit"> Выйти </button>
-      </div>
-    </aside>
+    <transition name="slide">
+      <aside class="modal_slider">
+        <table class="table">
+          <tbody>
+          <tr>
+            <td>Имя:</td>
+            <td>{{ userDetails.name }}</td>
+          </tr>
+          <tr>
+            <td>Почта:</td>
+            <td>{{ userDetails.email }}</td>
+          </tr>
+          <tr>
+            <td>Логин:</td>
+            <td>{{ userDetails.username }}</td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="button-group">
+          <button @click="goToDetail" class="submit-button">Инструкция</button>
+          <button @click="logout" class="submit-button exit"> Выйти </button>
+        </div>
+      </aside>
+    </transition>
   </div>
 </template>
 
@@ -33,6 +35,12 @@ export default {
       type:Object,
       required: true
     }
+  },
+  mounted(){
+    document.body.style.backgroundColor= "#9e9b9b";
+  },
+  beforeUnmount() {
+    document.body.style.backgroundColor= "#f5f5f5";
   },
   methods:{
     goToDetail(){
@@ -66,8 +74,14 @@ export default {
 
 <style scoped>
 .container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   justify-content: flex-end;
   align-items: flex-start;
+  z-index: 50;
   margin-top: 90px;
 }
 .modal_slider{
@@ -78,6 +92,7 @@ export default {
   height: 260px;
   border-radius: 10px;
   padding: 10px;
+  transition: transform 0.3s ease-in-out;
 }
 .submit-button {
   width: 120px;
@@ -90,5 +105,6 @@ export default {
   padding: 10px;
 
 }
+
 
 </style>

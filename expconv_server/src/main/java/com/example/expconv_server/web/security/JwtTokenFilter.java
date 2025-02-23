@@ -31,7 +31,6 @@ public class JwtTokenFilter extends GenericFilterBean {
             for (Cookie cookie : cookies) {
                 if ("accessToken".equals(cookie.getName())) {
                     token = cookie.getValue();
-                    logger.info("Токен - " + token);
                     break;
                 }
             }
@@ -40,7 +39,6 @@ public class JwtTokenFilter extends GenericFilterBean {
         if (token != null) {
             try {
                 boolean isValid = tokenProvider.validateToken(token);
-                logger.info("Токен валиден ? - " + isValid);
                 if (isValid) {
                     Authentication auth = tokenProvider.getAuthentication(token);
                     if (auth != null) {
@@ -52,7 +50,6 @@ public class JwtTokenFilter extends GenericFilterBean {
                     throw new RuntimeException("Ошибка авторизации в JwtTokenFilter ");
                 }
             } catch (Exception e) {
-                logger.error("Ошибка при обработке токена: ", e);
                 throw new ResourceNotFoundException("Ошибка с куки: " + e.getMessage());
             }
         }

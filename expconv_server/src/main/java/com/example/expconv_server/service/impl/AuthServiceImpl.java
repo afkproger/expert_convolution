@@ -35,16 +35,17 @@ public class AuthServiceImpl implements AuthService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (Exception e) {
-            System.out.println("Authentication failed: " + e.getMessage());
             throw new RuntimeException("Authentication failed", e);
         }
         User user = userService.getByUsername(loginRequest.getUsername());
         jwtResponse.setUsername(user.getUsername());
         jwtResponse.setUserId(user.getId());
 
+        logger.info("User for createToken " + user );
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername());
+
 
         jwtTokenProvider.addCookie("accessToken" , accessToken , Duration.ofMinutes(15) , response);
         jwtTokenProvider.addCookie("refreshToken", refreshToken , Duration.ofDays(7) , response);

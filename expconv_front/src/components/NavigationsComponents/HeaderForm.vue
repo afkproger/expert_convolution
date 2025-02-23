@@ -7,7 +7,7 @@
     </div>
     <div class="header-nav">
       <ul>
-        <li> <a href="https://spcras.ru/spiiras/" class="link" target="_blank"> Об институте </a> </li>
+<!--        <li> <a href="https://spcras.ru/spiiras/" class="link" target="_blank"> Об институте </a> </li>-->
         <li> <a href="https://litsam.ru/index.php/ru/homepage-ru" class="link" target="_blank"> О лаборатории </a> </li>
       </ul>
       <button @click="handleClick" class="submit-button">{{buttonText}}</button>
@@ -45,6 +45,7 @@ header{
   top: 0;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
 img{
@@ -55,11 +56,12 @@ img{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 62%;
+  width: 57%;
 }
 
 .header-nav ul {
   display: flex;
+  justify-content: center;
   list-style: none;
 }
 .header-nav ul li{

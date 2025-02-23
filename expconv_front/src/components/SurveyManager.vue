@@ -1,11 +1,19 @@
 <template>
 <HeaderForm button-text="Профиль" @buttonClick="openCloseModal"/>
-  <UserModalForm v-if="showModal" :user-details="userDetails"/>
+  <transition name="slide">
+    <UserModalForm v-if="showModal" :user-details="userDetails"/>
+  </transition>
+  <div class="workspace">
+    <h1>Опросники</h1>
+    <button class="submit-button"> Создать новый опросник</button>
+  </div>
 </template>
 
 <script>
 import HeaderForm from "@/components/NavigationsComponents/HeaderForm.vue";
 import UserModalForm from "@/components/NavigationsComponents/UserModalForm.vue";
+import {fetchWithAuth} from "@/api/apiService";
+
 export default {
   components: {UserModalForm, HeaderForm},
   data() {
@@ -35,21 +43,18 @@ export default {
       }
 
       try {
-        const response = await fetch(`${this.$apiBaseUrl}users/${user_id}`, {
+        const response = await fetchWithAuth(`${this.$apiBaseUrl}users/${user_id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include",
-        });
+        } , this.$apiBaseUrl , this.$router);
 
-        if (response.ok) {
+        if (response.ok && response) {
           const result = await response.json();
-          console.log("Ответ от сервера:", result); // Проверяем, что сервер отправил
 
           if (result) {
             this.userDetails = result;
-            console.log("userDetails обновлен:", this.userDetails); // Теперь должно работать
           } else {
             console.error("Ошибка: пустые данные пользователя");
           }
@@ -65,6 +70,21 @@ export default {
 </script>
 
 <style scoped>
+.workspace{
+  width: calc(100% - 20px);
+  margin-top: 90px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 
+.slide-enter-active, .slide-leave-active {
+  transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out;
+}
+
+.slide-enter-from, .slide-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
 
 </style>

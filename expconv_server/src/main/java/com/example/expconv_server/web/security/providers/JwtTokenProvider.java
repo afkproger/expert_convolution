@@ -68,13 +68,13 @@ public class JwtTokenProvider {
 
 
     public String createRefreshToken(Long userId, String username) {
-        Claims claims = Jwts.claims(); // создаем ClaimsBuilder
-        claims.put("userId", userId);  // добавляем данные в ClaimsBuilder
+        Claims claims = Jwts.claims();
+        claims.put("userId", userId);
         Date now = new Date();
         Date validity = new Date(now.getTime() + jwtProperties.getRefresh());
 
         return Jwts.builder()
-                .setClaims(claims)  // передаем уже готовый объект Claims
+                .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(validity)
@@ -82,20 +82,21 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public JwtResponse refreshUserToken(String refreshToken , HttpServletResponse response) {
+    public JwtResponse refreshUserToken(String refreshToken, HttpServletResponse response) {
         JwtResponse jwtResponse = new JwtResponse();
         if (validateToken(refreshToken)) {
-            Long userId = Long.valueOf(getId(refreshToken));
+            Long userId = getId(refreshToken);
             User user = userService.getById(userId);
             jwtResponse.setUserId(userId);
             jwtResponse.setUsername(user.getUsername());
 
             String updateAccessToken = createAccessToken(userId, user.getUsername(), user.getRoles());
-            String updateRefreshToken = createRefreshToken(user.getId() , user.getUsername());
+            String updateRefreshToken = createRefreshToken(user.getId(), user.getUsername());
 
-            deleteCookie("refreshToken" , response);
-            addCookie("accessToken" , updateAccessToken , Duration.ofMinutes(15) , response);
-            addCookie("refreshToken" , updateRefreshToken , Duration.ofDays(7) , response);
+            deleteCookie("refreshToken", response);
+            deleteCookie("accessToken", response);
+            addCookie("accessToken", updateAccessToken, Duration.ofMinutes(15), response);
+            addCookie("refreshToken", updateRefreshToken, Duration.ofDays(7), response);
 
             return jwtResponse;
         } else {
@@ -104,32 +105,31 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-        logger.info("Мы зашли в validateToken");
         try {
             Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-            return !claims.getExpiration().before(new Date());  // Проверка срока действия
+            return !claims.getExpiration().before(new Date());
 
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
+
     public boolean deleteTokens(HttpServletResponse response) {
         try {
-            deleteCookie("refreshToken" , response);
-            deleteCookie("accessToken" , response);
+            deleteCookie("refreshToken", response);
+            deleteCookie("accessToken", response);
             return true;
-        }catch (Exception e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
             return false;
         }
     }
 
-    private String getId(String token) {
+    private Long getId(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        return claims.getId();
+        return claims.get("userId", Long.class);
     }
 
-    private void deleteCookie(String name , HttpServletResponse response) {
+    private void deleteCookie(String name, HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from(name, "")
                 .httpOnly(true)
                 .sameSite("Lax")
@@ -139,7 +139,7 @@ public class JwtTokenProvider {
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
-    public void addCookie(String name , String value , Duration maxAge , HttpServletResponse response) {
+    public void addCookie(String name, String value, Duration maxAge, HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .httpOnly(true)
                 .sameSite("Lax")
