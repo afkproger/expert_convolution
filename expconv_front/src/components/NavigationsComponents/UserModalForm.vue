@@ -29,15 +29,23 @@
 
 
 <script>
+import {fetchWithAuth} from "@/api/apiService";
+
 export default {
-  props:{
-    userDetails:{
-      type:Object,
-      required: true
-    }
+  data(){
+    return {
+      userDetails: {
+        id: 0,
+        name: "",
+        username: "",
+        email: "",
+      },
+    };
   },
+
   mounted(){
     document.body.style.backgroundColor= "#9e9b9b";
+    this.getUserDetails();
   },
   beforeUnmount() {
     document.body.style.backgroundColor= "#f5f5f5";
@@ -66,6 +74,37 @@ export default {
         }
       } catch (error) {
         console.error("Ошибка в запросе:", error);
+      }
+    },
+    async getUserDetails() {
+      const user_id = localStorage.getItem("userId");
+
+      if (!user_id) {
+        console.error("User ID не найден в localStorage");
+        return;
+      }
+
+      try {
+        const response = await fetchWithAuth(`${this.$apiBaseUrl}users/${user_id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        } , this.$apiBaseUrl , this.$router);
+
+        if (response.ok && response) {
+          const result = await response.json();
+
+          if (result) {
+            this.userDetails = result;
+          } else {
+            console.error("Ошибка: пустые данные пользователя");
+          }
+        } else {
+          console.error("Ошибка запроса: ", response.status);
+        }
+      } catch (e) {
+        console.error("Ошибка запроса:", e.message);
       }
     }
   }

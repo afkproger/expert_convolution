@@ -54,7 +54,6 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username is already in use");
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> role = Set.of(Role.ROLE_USER);
         user.setRoles(role);

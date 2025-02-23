@@ -1,7 +1,7 @@
 <template>
 <HeaderForm button-text="Профиль" @buttonClick="openCloseModal"/>
   <transition name="slide">
-    <UserModalForm v-if="showModal" :user-details="userDetails"/>
+    <UserModalForm v-if="showModal"/>
   </transition>
   <div class="workspace">
     <h1>Опросники</h1>
@@ -24,17 +24,18 @@ export default {
         username: "",
         email: "",
       },
+      user_id: localStorage.getItem("userId"),
       showModal: false,
     };
   },
   mounted() {
-    this.getUserDetails();
+    this.getUserTasks();
   },
   methods: {
     openCloseModal() {
       this.showModal = !this.showModal;
     },
-    async getUserDetails() {
+    async getUserTasks() {
       const user_id = localStorage.getItem("userId");
 
       if (!user_id) {
@@ -43,7 +44,7 @@ export default {
       }
 
       try {
-        const response = await fetchWithAuth(`${this.$apiBaseUrl}users/${user_id}`, {
+        const response = await fetchWithAuth(`${this.$apiBaseUrl}users/${user_id}/tasks`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -54,7 +55,7 @@ export default {
           const result = await response.json();
 
           if (result) {
-            this.userDetails = result;
+            // тут добавить обработку для получения данных о задачах от пользователя
           } else {
             console.error("Ошибка: пустые данные пользователя");
           }
