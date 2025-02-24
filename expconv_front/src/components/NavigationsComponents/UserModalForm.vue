@@ -56,13 +56,13 @@ export default {
     },
     async logout() {
       try {
-        const response = await fetch(`${this.$apiBaseUrl}auth/logout`, {
+        const response = await fetchWithAuth(`${this.$apiBaseUrl}auth/logout`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
-        });
+        } , this.$apiBaseUrl, this.$router);
 
         if (response.ok) {
           const result = await response.json();
@@ -136,14 +136,7 @@ export default {
 .submit-button {
   width: 120px;
 }
-.button-group{
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 10px;
 
-}
 
 
 </style>

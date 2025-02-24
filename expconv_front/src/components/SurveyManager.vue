@@ -1,11 +1,23 @@
 <template>
-<HeaderForm button-text="Профиль" @buttonClick="openCloseModal"/>
+  <HeaderForm button-text="Профиль" @buttonClick="openCloseModal" />
   <transition name="slide">
-    <UserModalForm v-if="showModal"/>
+    <UserModalForm v-if="showModal" />
   </transition>
   <div class="workspace">
     <h1>Опросники</h1>
-    <button class="submit-button"> Создать новый опросник</button>
+    <button class="submit-button">Создать новый опросник</button>
+    <hr/>
+    <div v-if="usersTasks.length" style="width: 50%">
+      <TaskPropertyForm
+          v-for="task in usersTasks"
+          :key="task.id"
+          :taskDetails="task"
+          @calculate="handleCalculateConvolution"
+          @send="handleSendQuestionnaire"
+          @delete="handleDeleteTask"
+      />
+    </div>
+    <p v-else>Задач пока нет...</p>
   </div>
 </template>
 
@@ -13,18 +25,13 @@
 import HeaderForm from "@/components/NavigationsComponents/HeaderForm.vue";
 import UserModalForm from "@/components/NavigationsComponents/UserModalForm.vue";
 import {fetchWithAuth} from "@/api/apiService";
+import TaskPropertyForm from "@/components/SurveyComponents/TaskPropertyForm.vue";
 
 export default {
-  components: {UserModalForm, HeaderForm},
+  components: {TaskPropertyForm, UserModalForm, HeaderForm},
   data() {
     return {
-      userDetails: {
-        id: 0,
-        name: "",
-        username: "",
-        email: "",
-      },
-      user_id: localStorage.getItem("userId"),
+      usersTasks: [],
       showModal: false,
     };
   },
@@ -49,18 +56,47 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-        } , this.$apiBaseUrl , this.$router);
+        }, this.$apiBaseUrl, this.$router);
 
         if (response.ok && response) {
           const result = await response.json();
-
+          console.log(result);
           if (result) {
-            // тут добавить обработку для получения данных о задачах от пользователя
+            this.usersTasks = result;
           } else {
             console.error("Ошибка: пустые данные пользователя");
           }
         } else {
           console.error("Ошибка запроса: ", response.status);
+        }
+      } catch (e) {
+        console.error("Ошибка запроса:", e.message);
+      }
+    },
+    handleCalculateConvolution(id) {
+      console.log("Calculate Convolution from parent: " + id);
+    },
+    handleSendQuestionnaire(id) {
+      console.log("Sending Questionnaire from parent: " + id);
+    },
+    async handleDeleteTask(id) {
+      try {
+        // Делаем запрос на удаление
+        const response = await fetchWithAuth(`${this.$apiBaseUrl}tasks/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }, this.$apiBaseUrl, this.$router);
+
+        if (response.ok) {
+          const index = this.usersTasks.findIndex(task => task.id === id);
+          if (index !== -1) {
+            this.usersTasks.splice(index, 1);
+            console.log("Задача успешно удалена из массива.");
+          }
+        } else {
+          console.error("Ответ сервера с ошибкой: ");
         }
       } catch (e) {
         console.error("Ошибка запроса:", e.message);
@@ -74,9 +110,9 @@ export default {
 .workspace{
   width: calc(100% - 20px);
   margin-top: 90px;
-  display: flex;
   align-items: center;
   flex-direction: column;
+  display: inline-flex;
 }
 
 .slide-enter-active, .slide-leave-active {
@@ -86,6 +122,12 @@ export default {
 .slide-enter-from, .slide-leave-to {
   transform: translateX(100%);
   opacity: 0;
+}
+
+hr {
+  height: 2px;
+  background-color: black;
+  margin: 20px 0;
 }
 
 </style>

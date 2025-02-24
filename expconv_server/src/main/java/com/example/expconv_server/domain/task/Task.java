@@ -84,4 +84,17 @@ public class Task {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", expirationDate=" + expirationDate +
+                ", user=" + user +
+                ", scales=" + scales +
+                '}';
+    }
 }

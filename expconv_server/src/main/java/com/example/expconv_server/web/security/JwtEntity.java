@@ -1,7 +1,5 @@
 package com.example.expconv_server.web.security;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,11 +20,7 @@ public class JwtEntity implements UserDetails {
                 '}';
     }
 
-    @Setter
-    @Getter
     private Long id;
-    @Setter
-    @Getter
     private String name;
     private String email;
     private final String username;
@@ -77,5 +71,29 @@ public class JwtEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

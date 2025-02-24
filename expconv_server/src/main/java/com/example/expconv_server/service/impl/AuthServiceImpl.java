@@ -41,7 +41,6 @@ public class AuthServiceImpl implements AuthService {
         jwtResponse.setUsername(user.getUsername());
         jwtResponse.setUserId(user.getId());
 
-        logger.info("User for createToken " + user );
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername());

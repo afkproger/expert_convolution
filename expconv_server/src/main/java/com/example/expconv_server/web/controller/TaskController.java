@@ -2,14 +2,20 @@ package com.example.expconv_server.web.controller;
 
 
 import com.example.expconv_server.domain.task.Task;
+import com.example.expconv_server.domain.user.User;
 import com.example.expconv_server.service.TaskService;
 import com.example.expconv_server.web.dto.task.TaskDto;
 import com.example.expconv_server.web.dto.validation.OnUpdate;
 import com.example.expconv_server.web.mappers.TaskMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/tasks")
@@ -45,9 +51,14 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete task")
-    public void deleteById(@PathVariable Long id) {
-        taskService.delete(id);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            taskService.delete(id);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(Map.of("deleted", true));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("deleted", false));
+        }
     }
-
-
 }

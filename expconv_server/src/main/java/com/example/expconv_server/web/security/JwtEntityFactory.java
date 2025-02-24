@@ -20,7 +20,6 @@ public class JwtEntityFactory {
                 user.getEmail(),
                 mapToGrantedAuthorization(new ArrayList<>(user.getRoles()))
         );
-        System.out.println(entity);
         return entity;
     }
 

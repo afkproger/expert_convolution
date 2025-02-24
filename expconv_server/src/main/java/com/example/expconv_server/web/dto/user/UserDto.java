@@ -6,7 +6,6 @@ import com.example.expconv_server.web.dto.validation.OnCreate;
 import com.example.expconv_server.web.dto.validation.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;

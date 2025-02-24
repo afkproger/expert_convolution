@@ -3,7 +3,6 @@ package com.example.expconv_server.web.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
 @Schema(description = "Request for login")
 public class JwtRequest {
