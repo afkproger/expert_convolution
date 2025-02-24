@@ -1,5 +1,6 @@
 <template>
   <div class="task-property-form">
+    <img src="../../assets/pages/change_convolution.png" @click="updateConvolution(taskDetails.id)" class="change-convolution">
     <h2>{{taskDetails.title}}</h2>
     <p> {{taskDetails.description}} </p>
     <p> Статус: {{taskDetails.status}} </p>
@@ -28,6 +29,9 @@ export default {
     },
     deleteTask(id){
       this.$emit("delete" , id)
+    },
+    updateConvolution(id){
+      this.$emit("update" , id)
     }
   }
 }
@@ -35,24 +39,33 @@ export default {
 </script>
 
 <style scoped>
-.task-property-form{
+.task-property-form {
+  position: relative; /* Добавлено для корректного позиционирования вложенных элементов */
   align-items: center;
   width: calc(100% - 40px);
   box-shadow: -2px -2px 4px rgba(61, 105, 16, 0.5),
   2px 2px 4px rgba(61, 105, 16, 0.5);
   border-radius: 10px;
-  padding: 2px;
+  padding: 5px 5px 5px 5px;
   margin: 15px;
 }
-.task-property-form:hover{
-  background-color: #87a5bf;
+
+.task-property-form:hover {
+  background-color: #dcdcdc;
 }
+
 .task-property-form h2,
 .task-property-form p {
   text-align: center;
 }
-.delete-button:hover{
-  background-color: red;
+
+.change-convolution {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
 }
 
 </style>

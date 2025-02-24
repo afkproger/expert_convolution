@@ -4,10 +4,10 @@
     <UserModalForm v-if="showModal" />
   </transition>
   <div class="workspace">
-    <h1>Опросники</h1>
+    <h1 style="font-size: 50px">Опросники</h1>
     <button class="submit-button">Создать новый опросник</button>
     <hr/>
-    <div v-if="usersTasks.length" style="width: 50%">
+    <div v-if="usersTasks.length" style="width: 60%">
       <TaskPropertyForm
           v-for="task in usersTasks"
           :key="task.id"
@@ -15,6 +15,7 @@
           @calculate="handleCalculateConvolution"
           @send="handleSendQuestionnaire"
           @delete="handleDeleteTask"
+          @update="handleUpdateTask"
       />
     </div>
     <p v-else>Задач пока нет...</p>
@@ -79,6 +80,9 @@ export default {
     handleSendQuestionnaire(id) {
       console.log("Sending Questionnaire from parent: " + id);
     },
+    handleUpdateTask(id) {
+      console.log("Update Task from parent: " + id);
+    },
     async handleDeleteTask(id) {
       try {
         // Делаем запрос на удаление
@@ -125,9 +129,7 @@ export default {
 }
 
 hr {
-  height: 2px;
-  background-color: black;
-  margin: 20px 0;
+  margin: 10px;
 }
 
 </style>
