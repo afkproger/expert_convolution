@@ -3,9 +3,9 @@
   <transition name="slide">
     <UserModalForm v-if="showModal" />
   </transition>
-  <div class="workspace">
+  <div v-if="showComponent" class="workspace">
     <h1 style="font-size: 50px">Опросники</h1>
-    <button class="submit-button">Создать новый опросник</button>
+    <button class="submit-button" @click="toggleTaskForm">Создать новый опросник</button>
     <hr/>
     <div v-if="usersTasks.length" style="width: 60%">
       <TaskPropertyForm
@@ -20,20 +20,25 @@
     </div>
     <p v-else>Задач пока нет...</p>
   </div>
+
+  <TaskConfigurationForm v-if="showCreateTask" @closeForm="toggleTaskForm"/>
 </template>
 
 <script>
 import HeaderForm from "@/components/NavigationsComponents/HeaderForm.vue";
 import UserModalForm from "@/components/NavigationsComponents/UserModalForm.vue";
 import {fetchWithAuth} from "@/api/apiService";
-import TaskPropertyForm from "@/components/SurveyComponents/TaskPropertyForm.vue";
+import TaskPropertyForm from "@/components/SurveyComponents/TaskForms/TaskPropertyForm.vue";
+import TaskConfigurationForm from "@/components/SurveyComponents/TaskForms/TaskConfigurationForm.vue";
 
 export default {
-  components: {TaskPropertyForm, UserModalForm, HeaderForm},
+  components: {TaskConfigurationForm, TaskPropertyForm, UserModalForm, HeaderForm},
   data() {
     return {
       usersTasks: [],
       showModal: false,
+      showComponent: true,
+      showCreateTask: false,
     };
   },
   mounted() {
@@ -42,6 +47,10 @@ export default {
   methods: {
     openCloseModal() {
       this.showModal = !this.showModal;
+    },
+    toggleTaskForm() {
+      this.showComponent = !this.showComponent;
+      this.showCreateTask = !this.showCreateTask;
     },
     async getUserTasks() {
       const user_id = localStorage.getItem("userId");

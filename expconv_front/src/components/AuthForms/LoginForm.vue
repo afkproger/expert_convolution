@@ -2,7 +2,7 @@
   <div class="container">
     <div class="form-container">
       <header>
-        <img src="../assets/pages/login_logo.png" alt="Логотип СПБ ФИЦ РАН" class="logo">
+        <img src="../../assets/pages/login_logo.png" alt="Логотип СПБ ФИЦ РАН" class="logo">
         <h1>Войти в систему</h1>
       </header>
       <form  @submit.prevent = "handleSubmit">

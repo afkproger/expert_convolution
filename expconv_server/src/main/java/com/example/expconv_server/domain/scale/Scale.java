@@ -1,10 +1,7 @@
 package com.example.expconv_server.domain.scale;
 
-import com.example.expconv_server.domain.indicator.Indicators;
 import com.example.expconv_server.domain.task.Task;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "scale")
@@ -22,17 +19,6 @@ public class Scale {
     @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;
-
-    @OneToMany(mappedBy = "scale")
-    private List<Indicators> indicators;
-
-    public List<Indicators> getIndicators() {
-        return indicators;
-    }
-
-    public void setIndicators(List<Indicators> indicators) {
-        this.indicators = indicators;
-    }
 
     public Task getTask() {
         return task;
@@ -64,5 +50,15 @@ public class Scale {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Scale{" +
+                "id=" + id +
+                ", grade='" + grade + '\'' +
+                ", weight='" + weight + '\'' +
+                ", task=" + task +
+                '}';
     }
 }

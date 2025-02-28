@@ -1,5 +1,6 @@
 package com.example.expconv_server.domain.task;
 
+import com.example.expconv_server.domain.indicator.Indicator;
 import com.example.expconv_server.domain.scale.Scale;
 import com.example.expconv_server.domain.user.User;
 import jakarta.persistence.*;
@@ -26,7 +27,10 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task" , cascade = CascadeType.ALL, orphanRemoval = true )
+    private List<Indicator> indicators;
+
+    @OneToMany(mappedBy = "task" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Scale> scales;
 
     public List<Scale> getScales() {
@@ -85,6 +89,14 @@ public class Task {
         this.user = user;
     }
 
+    public List<Indicator> getIndicators() {
+        return indicators;
+    }
+
+    public void setIndicators(List<Indicator> indicators) {
+        this.indicators = indicators;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -94,6 +106,7 @@ public class Task {
                 ", status=" + status +
                 ", expirationDate=" + expirationDate +
                 ", user=" + user +
+                ", indicators=" + indicators +
                 ", scales=" + scales +
                 '}';
     }

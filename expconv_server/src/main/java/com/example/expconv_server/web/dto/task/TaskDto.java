@@ -1,6 +1,8 @@
 package com.example.expconv_server.web.dto.task;
 
 import com.example.expconv_server.domain.task.Status;
+import com.example.expconv_server.web.dto.indicator.IndicatorDto;
+import com.example.expconv_server.web.dto.scale.ScaleDto;
 import com.example.expconv_server.web.dto.validation.OnCreate;
 import com.example.expconv_server.web.dto.validation.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,6 +12,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Schema(description = "Task Dto")
@@ -33,6 +36,27 @@ public class TaskDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime expirationDate;
 
+    @Schema(description = "List of scales for the task")
+    private List<ScaleDto> scale;
+
+    @Schema(description = "List of indicators for the task")
+    private List<IndicatorDto> indicators;
+
+    public List<ScaleDto> getScale() {
+        return scale;
+    }
+
+    public void setScale(List<ScaleDto> scale) {
+        this.scale = scale;
+    }
+
+    public List<IndicatorDto> getIndicators() {
+        return indicators;
+    }
+
+    public void setIndicators(List<IndicatorDto> indicators) {
+        this.indicators = indicators;
+    }
 
     public @NotNull(message = "Id must be not null", groups = OnUpdate.class) Long getId() {
         return id;

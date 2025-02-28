@@ -10,6 +10,8 @@ import com.example.expconv_server.service.TaskService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -59,6 +61,7 @@ public class TaskServiceImpl implements TaskService {
         task.setStatus(Status.TODO);
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException("Пользователь с таким id не найден , не возможно создать для него задачу"));
+        task.setExpirationDate(LocalDateTime.now());
         task.setUser(user);
         taskRepository.save(task);
         return task;

@@ -1,12 +1,12 @@
 package com.example.expconv_server.domain.indicator;
 
 
-import com.example.expconv_server.domain.scale.Scale;
+import com.example.expconv_server.domain.task.Task;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "indicators")
-public class Indicators {
+public class Indicator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,15 +18,15 @@ public class Indicators {
     private String question;
 
     @ManyToOne
-    @JoinColumn(name = "scale_id")
-    private Scale scale;
+    @JoinColumn(name = "task_id")
+    private Task task;
 
-    public Scale getScale() {
-        return scale;
+    public Task getTask() {
+        return task;
     }
 
-    public void setScale(Scale scale) {
-        this.scale = scale;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public Long getId() {
@@ -51,5 +51,15 @@ public class Indicators {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    @Override
+    public String toString() {
+        return "Indicators{" +
+                "id=" + id +
+                ", indicator='" + indicator + '\'' +
+                ", question='" + question + '\'' +
+                ", task=" + task +
+                '}';
     }
 }

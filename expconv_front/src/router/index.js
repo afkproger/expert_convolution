@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeForm from '../components/HomeForm.vue';
-import LoginForm from '../components/LoginForm.vue';
-import RegisterForm from '../components/RegisterForm.vue';
+import LoginForm from '../components/AuthForms/LoginForm.vue';
+import RegisterForm from '../components/AuthForms/RegisterForm.vue';
 import SurveyManager from "@/components/SurveyManager.vue";
 
 const routes = [

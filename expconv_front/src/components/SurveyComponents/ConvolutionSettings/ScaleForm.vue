@@ -5,7 +5,7 @@
             Введите лингвистическую оценку (например: низкое, высокое, большое) и вес от 0.0 до 1.0
     </span>
   </h3>
-  <div v-for="(scaleItem, index) in taskScale" :key="index" class="scale-item">
+  <div v-for="(scaleItem, index) in taskScale" :key="index" class="task-item">
     <input type="text" v-model="scaleItem.grade" placeholder="Лингвистические оценка" required />
     <input
         type="text"
@@ -13,9 +13,9 @@
         placeholder="Вес (от 0.0 до 1.0)"
         required
     />
-    <button type="button" class="remove-button" @click="removeScaleItem(index)">Удалить</button>
+    <button type="button" class="submit-button exit" @click="removeScaleItem(index)">Удалить</button>
   </div>
-  <button type="button" class="add-button" @click="addScaleItem">Добавить значение шкалы</button>
+  <button type="button" class="submit-button" @click="addScaleItem">Добавить значение шкалы</button>
 </template>
 
 <script>
@@ -26,6 +26,11 @@ export default {
       required: true
     }
   },
+  data(){
+    return{
+      showTooltip:false,
+    }
+  },
   computed:{
     taskScale:{
       get(){
@@ -34,6 +39,14 @@ export default {
       set(val){
         this.$emit('update:scaleObject',val)
       }
+    }
+  },
+  methods:{
+    addScaleItem(){
+      this.taskScale.push({ grade: '', weight: null });
+    },
+    removeScaleItem(index){
+      this.taskScale.splice(index,1)
     }
   }
 }
