@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,12 +75,16 @@ public class UserController {
 
     @PostMapping("/{id}/tasks")
     @Operation(summary = "Add task to user")
-    public TaskDto createUserTask(@PathVariable Long id,
-                                  @Validated(OnCreate.class) @RequestBody TaskDto taskDto) {
-
-        Task task = taskMapper.toEntity(taskDto);
-        Task createdTask = taskService.create(task, id);
-        return taskMapper.toDto(createdTask);
+    public ResponseEntity<?> createUserTask(@PathVariable Long id,
+                                         @Validated(OnCreate.class) @RequestBody TaskDto taskDto) {
+        try {
+            Task task = taskMapper.toEntity(taskDto);
+            Task createdTask = taskService.create(task, id);
+            return ResponseEntity.status(HttpStatus.OK).body(createdTask);
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
 
     }
 

@@ -17,12 +17,30 @@
 import ScaleForm from "@/components/SurveyComponents/ConvolutionSettings/ScaleForm.vue";
 import IndicatorsForm from "@/components/SurveyComponents/ConvolutionSettings/IndicatorsForm.vue";
 import InfoForm from "@/components/SurveyComponents/ConvolutionSettings/InfoForm.vue";
+import {fetchWithAuth} from "@/api/apiService";
 export default {
   components: {ScaleForm, InfoForm , IndicatorsForm},
   methods: {
-    submitTaskDetails (){
-      console.log("Данные отправились на сервер");
-      console.log(this.task);
+    async submitTaskDetails (){
+      try {
+        const response = fetchWithAuth(`${this.$apiBaseUrl}users/${this.userId}/tasks`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: this.task.title,
+            description: this.task.description,
+            scale: this.task.scale,
+            indicators: this.task.indicators
+          })
+        });
+        if (response.status === 200) {
+          this.goToWorkspace();
+        }
+      }catch(err){
+        console.error(err);
+      }
     },
     goToWorkspace (){
       this.$emit("closeForm")
@@ -31,11 +49,12 @@ export default {
   data(){
     return {
       task:{
-        name: "",
+        title: "",
         description: "",
         scale: [],
         indicators: []
-      }
+      },
+      userId:localStorage.getItem("userId"),
     }
   }
 }

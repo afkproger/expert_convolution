@@ -4,7 +4,7 @@
     <input
         type="text"
         id="taskName"
-        v-model="taskInfo.name"
+        v-model="taskInfo.title"
         required
         placeholder="Введите название опросника для отображения в списке заданий"
     />
