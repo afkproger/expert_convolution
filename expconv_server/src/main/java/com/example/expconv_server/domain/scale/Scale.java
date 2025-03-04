@@ -1,6 +1,7 @@
 package com.example.expconv_server.domain.scale;
 
 import com.example.expconv_server.domain.task.Task;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -18,6 +19,7 @@ public class Scale {
 
     @ManyToOne
     @JoinColumn(name = "task_id")
+    @JsonBackReference
     private Task task;
 
     public Task getTask() {
@@ -58,7 +60,6 @@ public class Scale {
                 "id=" + id +
                 ", grade='" + grade + '\'' +
                 ", weight='" + weight + '\'' +
-                ", task=" + task +
                 '}';
     }
 }

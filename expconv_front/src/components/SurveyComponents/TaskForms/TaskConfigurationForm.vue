@@ -11,6 +11,7 @@
       <button @click="submitTaskDetails" class="submit-button"> Сохранить </button>
     </div>
   </div>
+  <div v-if="task"> {{task}}}</div>
 </template>
 
 <script>
@@ -22,19 +23,21 @@ export default {
   components: {ScaleForm, InfoForm , IndicatorsForm},
   methods: {
     async submitTaskDetails (){
+      const responseData = {
+        title: this.task.title,
+        description: this.task.description,
+        scale: this.task.scale,
+        indicators: this.task.indicators
+      }
+      console.log(responseData);
       try {
         const response = fetchWithAuth(`${this.$apiBaseUrl}users/${this.userId}/tasks`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            title: this.task.title,
-            description: this.task.description,
-            scale: this.task.scale,
-            indicators: this.task.indicators
-          })
-        });
+          body: JSON.stringify(responseData)
+        } , this.$apiBaseUrl , this.$router );
         if (response.status === 200) {
           this.goToWorkspace();
         }

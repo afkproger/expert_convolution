@@ -59,7 +59,6 @@ public class Indicator {
                 "id=" + id +
                 ", indicator='" + indicator + '\'' +
                 ", question='" + question + '\'' +
-                ", task=" + task +
                 '}';
     }
 }

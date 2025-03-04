@@ -3,6 +3,7 @@ package com.example.expconv_server.domain.task;
 import com.example.expconv_server.domain.indicator.Indicator;
 import com.example.expconv_server.domain.scale.Scale;
 import com.example.expconv_server.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -28,17 +29,19 @@ public class Task {
     private User user;
 
     @OneToMany(mappedBy = "task" , cascade = CascadeType.ALL, orphanRemoval = true )
+    @JsonManagedReference
     private List<Indicator> indicators;
 
     @OneToMany(mappedBy = "task" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Scale> scales;
+    @JsonManagedReference
+    private List<Scale> scale;
 
-    public List<Scale> getScales() {
-        return scales;
+    public List<Scale> getScale() {
+        return scale;
     }
 
-    public void setScales(List<Scale> scales) {
-        this.scales = scales;
+    public void setScale(List<Scale> scale) {
+        this.scale = scale;
     }
 
     public Long getId() {
@@ -107,7 +110,7 @@ public class Task {
                 ", expirationDate=" + expirationDate +
                 ", user=" + user +
                 ", indicators=" + indicators +
-                ", scales=" + scales +
+                ", scales=" + scale +
                 '}';
     }
 }

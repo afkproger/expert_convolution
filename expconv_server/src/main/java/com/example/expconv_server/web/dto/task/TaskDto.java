@@ -97,5 +97,18 @@ public class TaskDto {
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    @Override
+    public String toString() {
+        return "TaskDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", expirationDate=" + expirationDate +
+                ", scale=" + scale +
+                ", indicators=" + indicators +
+                '}';
+    }
 }
 

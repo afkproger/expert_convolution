@@ -67,9 +67,7 @@ public class UserController {
     @Operation(summary = "Get all user tasks")
     public List<TaskDto> getUserTasks(@PathVariable Long id) {
         List<Task> userTasksById = taskService.getAllByUserId(id);
-        logger.info("User tasks " + userTasksById.toString());
         List<TaskDto> taskDto = taskMapper.toDto(userTasksById);
-        logger.info("Tasks dto" + taskDto.toString());
         return taskDto;
     }
 
@@ -78,8 +76,10 @@ public class UserController {
     public ResponseEntity<?> createUserTask(@PathVariable Long id,
                                          @Validated(OnCreate.class) @RequestBody TaskDto taskDto) {
         try {
+            logger.info(taskDto.toString());
             Task task = taskMapper.toEntity(taskDto);
             Task createdTask = taskService.create(task, id);
+            logger.info("Task created" + createdTask.toString());
             return ResponseEntity.status(HttpStatus.OK).body(createdTask);
         }catch (Exception e) {
             logger.error(e.getMessage());

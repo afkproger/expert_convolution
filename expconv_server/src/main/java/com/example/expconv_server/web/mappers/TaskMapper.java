@@ -10,11 +10,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
-    @Mapping(target = "scales", source = "scales")
+    @Mapping(target = "scale", source = "scale")
     @Mapping(target = "indicators", source = "indicators")
     TaskDto toDto(Task task);
     List<TaskDto> toDto(List<Task> tasks);
 
-    @InheritInverseConfiguration
+    @Mapping(target = "scale", source = "scale")
     Task toEntity(TaskDto taskDto);
 }

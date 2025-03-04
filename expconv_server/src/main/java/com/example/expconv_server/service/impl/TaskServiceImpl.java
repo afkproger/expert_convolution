@@ -1,6 +1,8 @@
 package com.example.expconv_server.service.impl;
 
 import com.example.expconv_server.domain.exception.ResourceNotFoundException;
+import com.example.expconv_server.domain.indicator.Indicator;
+import com.example.expconv_server.domain.scale.Scale;
 import com.example.expconv_server.domain.task.Status;
 import com.example.expconv_server.domain.task.Task;
 import com.example.expconv_server.domain.user.User;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -61,6 +62,16 @@ public class TaskServiceImpl implements TaskService {
         task.setStatus(Status.TODO);
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException("Пользователь с таким id не найден , не возможно создать для него задачу"));
+        if (task.getIndicators() != null) {
+            for (Indicator indicator : task.getIndicators()) {
+                indicator.setTask(task);
+            }
+        }
+        if (task.getScale() != null) {
+            for (Scale scale : task.getScale()) {
+                scale.setTask(task);
+            }
+        }
         task.setExpirationDate(LocalDateTime.now());
         task.setUser(user);
         taskRepository.save(task);
