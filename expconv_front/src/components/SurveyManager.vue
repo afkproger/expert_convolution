@@ -21,7 +21,7 @@
     <p v-else>Задач пока нет...</p>
   </div>
 
-  <TaskConfigurationForm v-if="showCreateTask" @closeForm="toggleTaskForm"/>
+  <TaskConfigurationForm v-if="showCreateTask" @closeForm="toggleTaskForm" :task-data="selectedTask" />
 </template>
 
 <script>
@@ -39,6 +39,7 @@ export default {
       showModal: false,
       showComponent: true,
       showCreateTask: false,
+      selectedTask: null,
     };
   },
   mounted() {
@@ -51,6 +52,10 @@ export default {
     toggleTaskForm() {
       this.showComponent = !this.showComponent;
       this.showCreateTask = !this.showCreateTask;
+      if (!this.showCreateTask) {
+        this.selectedTask = null;
+        this.getUserTasks();
+      }
     },
     async getUserTasks() {
       const user_id = localStorage.getItem("userId");
@@ -89,8 +94,11 @@ export default {
     handleSendQuestionnaire(id) {
       console.log("Sending Questionnaire from parent: " + id);
     },
-    handleUpdateTask(id) {
-      console.log("Update Task from parent: " + id);
+    handleUpdateTask(task) {
+      this.selectedTask = { ...task };
+      console.log("Update Task", { ...task});
+      this.showComponent = !this.showComponent;
+      this.showCreateTask = !this.showCreateTask;
     },
     async handleDeleteTask(id) {
       try {

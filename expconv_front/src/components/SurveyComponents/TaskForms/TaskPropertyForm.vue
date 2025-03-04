@@ -1,6 +1,6 @@
 <template>
   <div class="task-property-form">
-    <img src="../../../assets/pages/change_convolution.png" @click="updateConvolution(taskDetails.id)" class="change-convolution">
+    <img src="../../../assets/pages/change_convolution.png" @click="updateConvolution(taskDetails)" class="change-convolution">
     <h2>{{taskDetails.title}}</h2>
     <p> {{taskDetails.description}} </p>
     <p> Статус: {{taskDetails.status}} </p>

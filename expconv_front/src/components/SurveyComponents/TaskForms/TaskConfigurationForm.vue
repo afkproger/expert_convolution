@@ -1,6 +1,6 @@
 <template>
   <div class="task-settings">
-    <h2>Создание нового опросника</h2>
+    <h2>{{ isEditMode ? 'Редактирование опросника' : 'Создание нового опросника' }}</h2>
     <form @submit.prevent="submitTaskDetails">
       <InfoForm v-model:task-object="task" />
       <ScaleForm v-model:scale-object="task.scale"/>
@@ -11,57 +11,72 @@
       <button @click="submitTaskDetails" class="submit-button"> Сохранить </button>
     </div>
   </div>
-  <div v-if="task"> {{task}}}</div>
 </template>
 
 <script>
 import ScaleForm from "@/components/SurveyComponents/ConvolutionSettings/ScaleForm.vue";
 import IndicatorsForm from "@/components/SurveyComponents/ConvolutionSettings/IndicatorsForm.vue";
 import InfoForm from "@/components/SurveyComponents/ConvolutionSettings/InfoForm.vue";
-import {fetchWithAuth} from "@/api/apiService";
+import { fetchWithAuth } from "@/api/apiService";
+
 export default {
-  components: {ScaleForm, InfoForm , IndicatorsForm},
+  components: { ScaleForm, InfoForm, IndicatorsForm },
+  props: {
+    taskData: Object,
+  },
+  data() {
+    return {
+      task: this.taskData
+          ? { ...this.taskData }
+          : {
+            title: "",
+            description: "",
+            scale: [],
+            indicators: [],
+          },
+      userId: localStorage.getItem("userId"),
+    };
+  },
+  computed: {
+    isEditMode() {
+      return !!this.task.id;
+    },
+  },
   methods: {
-    async submitTaskDetails (){
+    async submitTaskDetails() {
       const responseData = {
         title: this.task.title,
         description: this.task.description,
         scale: this.task.scale,
-        indicators: this.task.indicators
-      }
-      console.log(responseData);
+        indicators: this.task.indicators,
+      };
+
       try {
-        const response = fetchWithAuth(`${this.$apiBaseUrl}users/${this.userId}/tasks`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(responseData)
-        } , this.$apiBaseUrl , this.$router );
-        if (response.status === 200) {
+        const method = this.isEditMode ? "PUT" : "POST"; // Меняем метод
+        const response = await fetchWithAuth(
+            `${this.$apiBaseUrl}users/${this.userId}/tasks`,
+            {
+              method,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(responseData),
+            },
+            this.$apiBaseUrl,
+            this.$router
+        );
+
+        if (response.ok) {
+          this.$emit("taskSaved"); // Обновляем родительский список задач
           this.goToWorkspace();
         }
-      }catch(err){
+      } catch (err) {
         console.error(err);
       }
     },
-    goToWorkspace (){
-      this.$emit("closeForm")
-    }
+    goToWorkspace() {
+      this.$emit("closeForm");
+    },
   },
-  data(){
-    return {
-      task:{
-        title: "",
-        description: "",
-        scale: [],
-        indicators: []
-      },
-      userId:localStorage.getItem("userId"),
-    }
-  }
-}
-
+};
 </script>
 
 <style scoped>
